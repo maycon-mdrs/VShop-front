@@ -22,10 +22,12 @@ import { TbEdit } from "react-icons/tb";
 import { MdDeleteForever } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useProductDelete } from "@/hooks/useProductData";
+import imageNotFound from "@/assets/image_notfound.png";
 
 export function CardProduct(props: IProduct) {
     const { mutate, isSuccess } = useProductDelete();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [imageUrl, setImageUrl] = useState<string>(props.imageUrl);
 
     function buttonDelelte() {
         return (
@@ -55,6 +57,10 @@ export function CardProduct(props: IProduct) {
     const handleClose = () => {
         setIsModalOpen(prev => !prev);        
     }
+    
+    const onError = () => {
+        setImageUrl(imageNotFound);
+    };
 
     useEffect(() => {
         handleClose();
@@ -68,7 +74,7 @@ export function CardProduct(props: IProduct) {
                     {buttonDelelte()}
                 </div>
 
-                <img src={props.imageUrl} alt={props.name} className="w-auto h-40 object-scale-down" />
+                <img src={imageUrl} onError={onError} alt={props.name} className="w-auto h-40 object-scale-down" />
             </CardHeader>
             <CardContent className="flex justify-between">
                 <div>
