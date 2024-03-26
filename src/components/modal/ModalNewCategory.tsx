@@ -10,25 +10,36 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { FormsNewCategory } from "@/components/newCategory/FormsNewCategory";
+import { ICategory } from "@/interfaces/ICategory";
 
-export function ModalNewCategory() {
+export function ModalNewCategory({ initialValues }: { initialValues: Partial<ICategory> }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleModal = () => {
         setIsModalOpen(prev => !prev);
     }
-    
+
     return (
         <Dialog open={isModalOpen} onOpenChange={handleModal}>
             <DialogTrigger asChild>
-                <Button>New category</Button>
+                {
+                    initialValues ?
+                        <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">Edit</div>
+                        : <Button>New category</Button>
+                }
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>New category</DialogTitle>
-                    <DialogDescription>Add a new category for products.</DialogDescription>
+                    <DialogTitle>
+                        {initialValues ?
+                            `Edit the category ${initialValues.name}`
+                            : 'New category'}
+                    </DialogTitle>
+                    <DialogDescription>
+                        {initialValues ? 'Edit a category for products.' : 'Add a new category for products.'}
+                    </DialogDescription>
                 </DialogHeader>
-                <FormsNewCategory handleClose={handleModal} />
+                <FormsNewCategory handleClose={handleModal} initialValues={initialValues} />
             </DialogContent>
         </Dialog>
     )

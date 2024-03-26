@@ -22,6 +22,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Filter } from "@/components/Filter";
 import { useCategoryData, useCategoryDelete } from "@/hooks/useCategoryData";
 import { useProductData } from "@/hooks/useProductData";
+import { ModalNewCategory } from "../modal/ModalNewCategory";
 
 export function ListCategories() {
     const [searchParams] = useSearchParams();
@@ -67,10 +68,10 @@ export function ListCategories() {
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
-                                            <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                                            <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
-                                            <DropdownMenuItem>Editar</DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => mutate(category.categoryId!)}>Excluir</DropdownMenuItem>
+                                            <DropdownMenuItem asChild><ModalNewCategory initialValues={category} /></DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => mutate(category.categoryId!)}>Delete</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>

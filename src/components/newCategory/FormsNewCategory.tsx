@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
 import { ICategory } from "@/interfaces/ICategory";
 
-import { useCategoryData, useCategoryMutate } from "@/hooks/useCategoryData";
+import { useCategoryMutate, useCategoryUpdate } from "@/hooks/useCategoryData";
 
 const formSchema = z.object({
     name: z.string({
@@ -29,12 +29,14 @@ const formSchema = z.object({
     }),
 })
 
-export function FormsNewCategory({ handleClose }: { handleClose: () => void }) {
-    const categories = useCategoryData().data;
+export function FormsNewCategory({ handleClose, initialValues = {} }: { handleClose: () => void, initialValues: Partial<ICategory> }) {
     const { mutate, isSuccess } = useCategoryMutate();
+    const mutateUpdate = useCategoryUpdate().mutate;
+    const isSuccessUpdate = useCategoryUpdate().isSuccess;
 
     const form = useForm({
         resolver: zodResolver(formSchema),
+        defaultValues: initialValues,
     })
 
     const onSubmit = async (values: any) => {
@@ -42,12 +44,16 @@ export function FormsNewCategory({ handleClose }: { handleClose: () => void }) {
             name: values.name,
         }
 
-        mutate(data);
+        if (initialValues && initialValues.categoryId) {
+            mutateUpdate({ ...data, categoryId: initialValues.categoryId });
+        } else {
+            mutate(data);
+        }
     }
 
     useEffect(() => {
         handleClose();
-    }, [isSuccess])
+    }, [isSuccess, isSuccessUpdate])
 
     return (
         <Form {...form}>
@@ -66,7 +72,7 @@ export function FormsNewCategory({ handleClose }: { handleClose: () => void }) {
                     )}
                 />
 
-                <Button type="submit" className="w-full">Add</Button>
+                <Button type="submit" className="w-full">{ initialValues ? 'Save' : 'Add' }</Button>
             </form>
         </Form>
     )
