@@ -11,12 +11,10 @@ import {
 import { useProductData } from "@/hooks/useProductData";
 import { useCategoryData } from "@/hooks/useCategoryData";
 import { Filter } from "@/components/Filter";
-import { useSearchParams, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { useSearchParams } from "react-router-dom";
 
 export function ListProducts() {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
+    const [searchParams, _] = useSearchParams();
 
     const product = useProductData();
     const categories = useCategoryData();
@@ -31,18 +29,9 @@ export function ListProducts() {
         return matchesTitle && matches;
     });
 
-    // Função para limpar a busca
-    const clearSearch = () => {
-        setSearchParams(new URLSearchParams()); // Define uma nova URLSearchParams vazia
-        navigate('/'); // Volta para a URL padrão, se necessário
-    };
-
     return (
         <>
-            <div className="flex gap-2">
-                <Filter />
-                <Button variant="secondary" onClick={clearSearch}>X</Button>
-            </div>
+            <Filter />
             {categories.data?.map((category: ICategory, index) => {
                 const filteredProducts = filteredData.filter(product => product.categoryId === category.categoryId);
                 if (filteredProducts && filteredProducts.length > 0) {

@@ -22,7 +22,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Filter } from "@/components/Filter";
 import { useCategoryData, useCategoryDelete } from "@/hooks/useCategoryData";
 import { useProductData } from "@/hooks/useProductData";
-import { ModalNewCategory } from "../modal/ModalNewCategory";
+import { ModalCategory } from "@/components/modal/ModalCategory";
 
 export function ListCategories() {
     const [searchParams] = useSearchParams();
@@ -47,9 +47,9 @@ export function ListCategories() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Título</TableHead>
-                            <TableHead className="text-center">Quantidade de produtos</TableHead>
-                            <TableHead className="text-center">Total de estoque</TableHead>
+                            <TableHead>Title</TableHead>
+                            <TableHead className="text-center">Quantity of products</TableHead>
+                            <TableHead className="text-center">Total stock</TableHead>
                             <TableHead className="text-center"></TableHead>
                         </TableRow>
                     </TableHeader>
@@ -70,7 +70,7 @@ export function ListCategories() {
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
-                                            <DropdownMenuItem asChild><ModalNewCategory initialValues={category} /></DropdownMenuItem>
+                                            <DropdownMenuItem asChild><ModalCategory initialValues={category} /></DropdownMenuItem>
                                             <DropdownMenuItem onClick={() => mutate(category.categoryId!)}>Delete</DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>

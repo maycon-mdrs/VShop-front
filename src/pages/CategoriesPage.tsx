@@ -1,6 +1,6 @@
 import { MyNav } from "@/components/nav/MyNav";
 import { ListCategories } from "@/components/listCategories/ListCategories";
-import { ModalNewCategory } from "@/components/modal/ModalNewCategory";
+import { ModalNewCategory } from "@/components/modal/ModalCategory";
 
 export function CategoriesPage() {
     return (

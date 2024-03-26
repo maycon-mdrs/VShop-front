@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { FormsNewCategory } from "@/components/newCategory/FormsNewCategory";
 import { ICategory } from "@/interfaces/ICategory";
 
-export function ModalNewCategory({ initialValues }: { initialValues: Partial<ICategory> }) {
+export function ModalCategory({ initialValues }: { initialValues: Partial<ICategory> }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleModal = () => {
@@ -24,7 +24,9 @@ export function ModalNewCategory({ initialValues }: { initialValues: Partial<ICa
             <DialogTrigger asChild>
                 {
                     initialValues ?
-                        <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">Edit</div>
+                        <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent hover:text-accent-foreground">
+                            Edit
+                        </div>
                         : <Button>New category</Button>
                 }
             </DialogTrigger>

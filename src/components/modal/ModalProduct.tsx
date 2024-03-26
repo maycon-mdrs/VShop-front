@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FormsNewProduct } from "@/components/newProduct/FormsNewProduct";
 
-export function ModalNewProduct() {
+export function ModalProduct() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleModal = () => {

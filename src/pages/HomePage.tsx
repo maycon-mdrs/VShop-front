@@ -1,7 +1,6 @@
 import { MyNav } from "@/components/nav/MyNav";
-import { Button } from "@/components/ui/button";
 import { ListProducts } from "@/components/listProducts/ListProducts";
-import { ModalNewProduct } from "@/components/modal/ModalNewProduct";
+import { ModalProduct } from "@/components/modal/ModalProduct";
 
 export function HomePage() {
 
@@ -12,7 +11,7 @@ export function HomePage() {
                 <div className="flex items-center justify-between space-y-2">
                     <h2 className="text-2xl font-bold tracking-tight">Products</h2>
                     <div className="flex items-center space-x-2">
-                        <ModalNewProduct />
+                        <ModalProduct />
                     </div>
                 </div>
                 <ListProducts />
