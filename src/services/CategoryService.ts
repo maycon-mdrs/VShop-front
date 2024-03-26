@@ -33,9 +33,9 @@ export async function createCategory(category: ICategory): Promise<ICategory | n
     }
 }
 
-export async function updateCategory(id: number, category: ICategory): Promise<ICategory | null> {
+export async function updateCategory(category: ICategory): Promise<ICategory | null> {
     try {
-        const request = await Api.put(`/Categories/${id}`, category);
+        const request = await Api.put(`/Categories/${category.categoryId}`, category);
         return request.data;
     } catch (error) {
         console.error(error);
