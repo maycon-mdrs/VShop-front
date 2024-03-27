@@ -10,11 +10,13 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
   theme: Theme
+  effectiveTheme: Theme; // Adiciona uma nova propriedade para armazenar o tema efetivo
   setTheme: (theme: Theme) => void
 }
 
 const initialState: ThemeProviderState = {
   theme: "system",
+  effectiveTheme: "light", // Define um valor inicial para o tema efetivo
   setTheme: () => null,
 }
 
@@ -29,27 +31,24 @@ export function ThemeProvider({
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
   )
+  const [effectiveTheme, setEffectiveTheme] = useState<Theme>(theme) // Usa o tema como inicializador
 
   useEffect(() => {
-    const root = window.document.documentElement
+    const root = window.document.documentElement;
+    const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 
-    root.classList.remove("light", "dark")
+    root.classList.remove("light", "dark");
 
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light"
+    let currentTheme = theme === "system" ? systemTheme : theme;
+    root.classList.add(currentTheme);
 
-      root.classList.add(systemTheme)
-      return
-    }
+    setEffectiveTheme(currentTheme); // Atualiza o tema efetivo com o tema atual
 
-    root.classList.add(theme)
   }, [theme])
 
   const value = {
     theme,
+    effectiveTheme, // Adiciona o tema efetivo ao contexto
     setTheme: (theme: Theme) => {
       localStorage.setItem(storageKey, theme)
       setTheme(theme)
