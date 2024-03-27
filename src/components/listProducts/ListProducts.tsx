@@ -44,6 +44,7 @@ export function ListProducts() {
                                         <CardProduct
                                             key={index}
                                             id={product.id}
+                                            description={product.description}
                                             name={product.name}
                                             price={product.price}
                                             imageUrl={product.imageUrl}

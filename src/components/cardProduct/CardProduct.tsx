@@ -18,11 +18,11 @@ import {
 import { Button } from "@/components/ui/button";
 
 import { IProduct } from "@/interfaces/IProduct";
-import { TbEdit } from "react-icons/tb";
 import { MdDeleteForever } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { useProductDelete } from "@/hooks/useProductData";
 import imageNotFound from "@/assets/image_notfound.png";
+import { ModalProduct } from "../modal/ModalProduct";
 
 export function CardProduct(props: IProduct) {
     const { mutate, isSuccess } = useProductDelete();
@@ -50,14 +50,10 @@ export function CardProduct(props: IProduct) {
         );
     }
 
-    const handleEdit = () => {
-        console.log("Editar produto");
+    const handleClose = () => {
+        setIsModalOpen(prev => !prev);
     }
 
-    const handleClose = () => {
-        setIsModalOpen(prev => !prev);        
-    }
-    
     const onError = () => {
         setImageUrl(imageNotFound);
     };
@@ -70,7 +66,15 @@ export function CardProduct(props: IProduct) {
         <Card className="w-[250px]">
             <CardHeader className="p-2 pb-4">
                 <div className="flex justify-between">
-                    <TbEdit size={22} className="text-muted-foreground" onClick={handleEdit} />
+                    <ModalProduct initialValues={{
+                        id: props.id,
+                        name: props.name,
+                        description: props.description,
+                        price: props.price,
+                        stock: props.stock,
+                        imageUrl: props.imageUrl,
+                        categoryId: props.categoryId,
+                    }} />
                     {buttonDelelte()}
                 </div>
 

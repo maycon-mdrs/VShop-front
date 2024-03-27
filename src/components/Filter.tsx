@@ -32,7 +32,7 @@ export function Filter() {
 
     return (
         <div className="flex items-center justify-between space-x-4">
-            <div className="flex items-center gap-2 justify-between md:justify-start w-full">
+            <div className="flex items-center gap-2">
                 {/* Search by title */}
                 <Input
                     placeholder="Search by title"

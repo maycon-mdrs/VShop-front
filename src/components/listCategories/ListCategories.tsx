@@ -17,18 +17,29 @@ import {
     DropdownMenuTrigger,
     DropdownMenuCheckboxItem
 } from "@/components/ui/dropdown-menu";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { Button } from "@/components/ui/button";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Filter } from "@/components/Filter";
 import { useCategoryData, useCategoryDelete } from "@/hooks/useCategoryData";
 import { useProductData } from "@/hooks/useProductData";
 import { ModalCategory } from "@/components/modal/ModalCategory";
+import { useEffect, useState } from "react";
+import { ICategory } from "@/interfaces/ICategory";
 
 export function ListCategories() {
     const [searchParams] = useSearchParams();
     const { data } = useCategoryData();
-    const { mutate } = useCategoryDelete();
-    const products = useProductData().data;
+    const { data: products } = useProductData();
 
     // Filtro de dados baseado nos searchParams
     const filteredData = (data ?? []).filter(category => {
@@ -63,7 +74,6 @@ export function ListCategories() {
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <Button variant="ghost" className="h-8 w-8 p-0">
-                                                <span className="sr-only">Open menu</span>
                                                 <DotsHorizontalIcon className="h-4 w-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
@@ -71,7 +81,7 @@ export function ListCategories() {
                                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                                             <DropdownMenuSeparator />
                                             <DropdownMenuItem asChild><ModalCategory initialValues={category} /></DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => mutate(category.categoryId!)}>Delete</DropdownMenuItem>
+                                            <DropdownMenuItem asChild><ButtonDelete category={category} /></DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </TableCell>
@@ -81,5 +91,39 @@ export function ListCategories() {
                 </Table>
             </div>
         </div>
+    );
+}
+
+function ButtonDelete({ category }: { category: ICategory }) {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { mutate, isSuccess } = useCategoryDelete();
+
+    const handleClose = () => {
+        setIsModalOpen(prev => !prev);
+    }
+
+    useEffect(() => {
+        handleClose();
+    }, [isSuccess]);
+    
+    return (
+        <Dialog open={isModalOpen} onOpenChange={handleClose}>
+            <DialogTrigger asChild>
+                <div className="relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 hover:bg-accent hover:text-accent-foreground">
+                    Delete
+                </div>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                        This action cannot be undone. This will permanently delete your category and his products.
+                    </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                    <Button variant="destructive" onClick={() => mutate(category.categoryId!)}>Delete</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
     );
 }

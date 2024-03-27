@@ -31,9 +31,9 @@ export async function createProduct(product: IProduct): Promise<IProduct | null>
     }
 }
 
-export async function updateProduct(id: number, product: IProduct): Promise<IProduct | null> {
+export async function updateProduct(product: IProduct): Promise<IProduct | null> {
     try {
-        const request = await Api.put(`/Products/${id}`, product);
+        const request = await Api.put(`/Products/${product.id}`, product);
         return request.data;
     } catch (error) {
         console.error(error);

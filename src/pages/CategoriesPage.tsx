@@ -1,6 +1,6 @@
 import { MyNav } from "@/components/nav/MyNav";
 import { ListCategories } from "@/components/listCategories/ListCategories";
-import { ModalNewCategory } from "@/components/modal/ModalCategory";
+import { ModalCategory } from "@/components/modal/ModalCategory";
 
 export function CategoriesPage() {
     return (
@@ -10,7 +10,7 @@ export function CategoriesPage() {
                 <div className="flex items-center justify-between space-y-2">
                     <h2 className="text-2xl font-bold tracking-tight">Categories</h2>
                     <div className="flex items-center space-x-2">
-                        <ModalNewCategory />
+                        <ModalCategory initialValues={null} />
                     </div>
                 </div>
                 <ListCategories />

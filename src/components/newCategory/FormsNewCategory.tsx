@@ -31,8 +31,7 @@ const formSchema = z.object({
 
 export function FormsNewCategory({ handleClose, initialValues = {} }: { handleClose: () => void, initialValues: Partial<ICategory> }) {
     const { mutate, isSuccess } = useCategoryMutate();
-    const mutateUpdate = useCategoryUpdate().mutate;
-    const isSuccessUpdate = useCategoryUpdate().isSuccess;
+    const { mutate: mutateUpdate, isSuccess: isSuccessUpdate }  = useCategoryUpdate();
 
     const form = useForm({
         resolver: zodResolver(formSchema),

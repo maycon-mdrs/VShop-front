@@ -23,25 +23,24 @@ import {
 } from "@/components/ui/select";
 
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ICategory } from "@/interfaces/ICategory";
 import { Textarea } from "@/components/ui/textarea";
 
 import { IProduct } from "@/interfaces/IProduct";
-import { createProduct } from "@/services/ProductService";
 import { useCategoryData } from "@/hooks/useCategoryData";
-import { useProductMutate } from "@/hooks/useProductData";
+import { useProductMutate, useProductUpdate } from "@/hooks/useProductData";
 
 const formSchema = z.object({
-    title: z.string({
+    name: z.string({
         required_error: "Please enter a title."
-    }).min(2, {
+    }).min(3, {
         message: "Title must be at least 2 characters.",
     }).max(100, {
         message: "Title must be at most 100 characters.",
     }),
 
-    image: z.string({
+    imageUrl: z.string({
         required_error: "Please enter a image URL."
     }).max(255, {
         message: "Image URL must be at most 255 characters.",
@@ -59,42 +58,57 @@ const formSchema = z.object({
         message: "Stock must be at least 0.",
     }),
 
-    category: z.string({
+    categoryId: z.string({
         required_error: "Please select a category.",
     }),
 })
 
-export function FormsNewProduct({ handleClose }: { handleClose: () => void }){
-    const categories = useCategoryData().data;
+export function FormsNewProduct({ handleClose, initialValues = {} }: { handleClose: () => void, initialValues: Partial<IProduct> | null }) {
     const { mutate, isSuccess } = useProductMutate();
+    const { mutate: updateProduct, isSuccess: isSuccessUpdate } = useProductUpdate();
+    const { data: categories } = useCategoryData();
+
+    const data = {
+        name: initialValues?.name,
+        description: initialValues?.description,
+        imageUrl: initialValues?.imageUrl,
+        price: initialValues?.price?.toString(),
+        stock: initialValues?.stock?.toString(),
+        categoryId: initialValues?.categoryId?.toString(),
+    }
 
     const form = useForm({
         resolver: zodResolver(formSchema),
+        defaultValues: data,
     })
 
     const onSubmit = async (values: any) => {
         const data: IProduct = {
-            name: values.title,
+            name: values.name,
             description: values.description,
-            imageUrl: values.image,
+            imageUrl: values.imageUrl,
             price: parseFloat(values.price.replace(',', '.')),
             stock: parseInt(values.stock),
-            categoryId: parseInt(values.category),
+            categoryId: parseInt(values.categoryId),
         }
 
-        mutate(data);
+        if (initialValues && initialValues.id) {
+            updateProduct({ ...data, id: initialValues.id });
+        } else {
+            mutate(data);
+        }
     }
 
     useEffect(() => {
         handleClose();
-    }, [isSuccess])
+    }, [isSuccess, isSuccessUpdate])
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                     control={form.control}
-                    name="title"
+                    name="name"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Title</FormLabel>
@@ -122,7 +136,7 @@ export function FormsNewProduct({ handleClose }: { handleClose: () => void }){
 
                 <FormField
                     control={form.control}
-                    name="image"
+                    name="imageUrl"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Image URL</FormLabel>
@@ -167,7 +181,7 @@ export function FormsNewProduct({ handleClose }: { handleClose: () => void }){
 
                 <FormField
                     control={form.control}
-                    name="category"
+                    name="categoryId"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Category</FormLabel>
@@ -188,7 +202,9 @@ export function FormsNewProduct({ handleClose }: { handleClose: () => void }){
                     )}
                 />
 
-                <Button type="submit" className="w-full">Add</Button>
+                <Button type="submit" className="w-full">
+                    {initialValues ? 'Save' : 'Add'}
+                </Button>
             </form>
         </Form>
     )

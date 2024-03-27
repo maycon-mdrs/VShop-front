@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { FormsNewCategory } from "@/components/newCategory/FormsNewCategory";
 import { ICategory } from "@/interfaces/ICategory";
 
-export function ModalCategory({ initialValues }: { initialValues: Partial<ICategory> }) {
+export function ModalCategory({ initialValues }: { initialValues: Partial<ICategory> | null }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleModal = () => {
@@ -41,7 +41,7 @@ export function ModalCategory({ initialValues }: { initialValues: Partial<ICateg
                         {initialValues ? 'Edit a category for products.' : 'Add a new category for products.'}
                     </DialogDescription>
                 </DialogHeader>
-                <FormsNewCategory handleClose={handleModal} initialValues={initialValues} />
+                <FormsNewCategory handleClose={handleModal} initialValues={initialValues as Partial<ICategory>} />
             </DialogContent>
         </Dialog>
     )
