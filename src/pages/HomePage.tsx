@@ -1,9 +1,11 @@
 import { MyNav } from "@/components/nav/MyNav";
 import { ListProducts } from "@/components/listProducts/ListProducts";
 import { ModalProduct } from "@/components/modal/ModalProduct";
+import { NoDATA } from "@/components/status/NoData";
+import { useProductData } from "@/hooks/useProductData";
 
 export function HomePage() {
-
+    const { data } = useProductData();
     return (
         <>
             <MyNav />
@@ -14,7 +16,14 @@ export function HomePage() {
                         <ModalProduct initialValues={null} />
                     </div>
                 </div>
-                <ListProducts />
+                {
+                    data?.length === 0 ?
+                        <div className="flex items-center justify-center h-[calc(100vh-25rem)]">
+                            <NoDATA />
+                        </div>
+                        : <ListProducts />
+                }
+
             </div>
         </>
     )

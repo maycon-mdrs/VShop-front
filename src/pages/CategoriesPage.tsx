@@ -1,8 +1,11 @@
 import { MyNav } from "@/components/nav/MyNav";
 import { ListCategories } from "@/components/listCategories/ListCategories";
 import { ModalCategory } from "@/components/modal/ModalCategory";
+import { NoDATA } from "@/components/status/NoData";
+import { useCategoryData } from "@/hooks/useCategoryData";
 
 export function CategoriesPage() {
+    const { data } = useCategoryData();
     return (
         <>
             <MyNav />
@@ -13,7 +16,13 @@ export function CategoriesPage() {
                         <ModalCategory initialValues={null} />
                     </div>
                 </div>
-                <ListCategories />
+                {
+                    data?.length === 0 ?
+                        <div className="flex items-center justify-center h-[calc(100vh-25rem)]">
+                            <NoDATA />
+                        </div>
+                        : <ListCategories />
+                }
             </div>
         </>
     )
